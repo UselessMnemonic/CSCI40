@@ -38,13 +38,13 @@ load : loads text from a file
 
 quit : prompts user to save and quit
 
-The following are extra methods:
+*The following are extra methods:
 
 moveUp : moves current line to up
 
 moveDown : moves current line to down
 
-The following are globals that may be used, as well as thier getters and setters if any:
+*The following are globals that may be used, as well as thier getters and setters if any:
 
 harambe : Text Body
 
