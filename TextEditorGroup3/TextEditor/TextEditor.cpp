@@ -52,7 +52,16 @@ void replace(int linesToReplace)
 {
 	if (linesToReplace < 0) //make sure user input is not negative number
 		return;
-	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToReplace); //destroy slots on interval [currentLine, currentLine+linesToReplace)
+
+	int currLine = getCurrentLine();
+
+	if (unsigned int(linesToReplace + currLine) > harambe.size()) //if number of lines to replace exceeds the size of the text body
+		linesToReplace = harambe.size() - currLine;//then we set the number to how many are left
+
+	for (int x = currLine; x < currLine + linesToReplace; x++)//for the lines specified
+	{
+		harambe.assign(x, ""); //set the line to blank
+	}
 }
 
 void locateString(string stringToFind)
