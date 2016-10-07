@@ -44,38 +44,29 @@ void setCurrentLine(int value); //set the value of currentLine
 
 int main() //use this to test your functions
 {
+
+	return 0;
 }
 
 void replace(int linesToReplace)
 {
-	if (linesToReplace < 0)
+	if (linesToReplace < 0) //make sure user input is not negative number
 		return;
-	int currLine = getCurrentLine();
-	for (int x = currLine; x < currLine + linesToReplace; x++)
-	{
-		try
-		{
-			harambe.assign(x, "");
-		}
-		catch (out_of_range ofr)
-		{
-			break; //break out of for loop--elements have been replaced.
-		}
-	}
-
+	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToReplace); //destroy slots on interval [currentLine, currentLine+linesToReplace)
 }
 
 void locateString(string stringToFind)
 {
-	if (stringToFind.compare(""))
+	if (stringToFind.compare("")) //make sure the token is not empty
 		return;
 
 	string testString;
-	for (unsigned int x = getCurrentLine(); x < harambe.size(); x++)
+	for (unsigned int x = getCurrentLine(); x < harambe.size(); x++) //for each line in the document, starting at current line
 	{
 		testString = harambe.at(x);
-		if (testString.find(stringToFind) != string::npos)
+		if (testString.find(stringToFind) != string::npos) //if the line contains the token, set the current line there
 		{
+			//TO-DO method to set line, prompt to check from begining of document
 			break;
 		}
 	}
@@ -83,16 +74,18 @@ void locateString(string stringToFind)
 
 void paste()
 {
-	vector<string>::iterator it = harambe.begin();
-	for(unsigned int x = 0; x < storedCopy.size(); x++)
+	vector<string>::iterator it = harambe.begin(); //create fancy "Start Here" sign
+	for(unsigned int x = 0; x < storedCopy.size(); x++) //for each line of copied text, paste after current line
 		harambe.insert(it+getCurrentLine()+x, storedCopy.at(x));
+	//TO-DO method to set line to last pasted line
 }
 
-void init()
+void init() //instantiates the globals
 {
 	harambe = vector<string>();
 	storedCopy = vector<string>();
 	setFileEdited(false);
+	currentLine = 0;
 }
 
 bool getFileEdited()
