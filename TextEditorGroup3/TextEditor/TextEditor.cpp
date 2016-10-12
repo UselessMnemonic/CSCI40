@@ -45,7 +45,10 @@ void setCurrentLine(int value); //set the value of currentLine
 
 int main() //use this to test your functions
 {
-
+	init();
+	
+	//enter test code here
+	
 	return 0;
 }
 
