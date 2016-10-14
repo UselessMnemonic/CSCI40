@@ -9,6 +9,11 @@
 #include <fstream>
 using namespace std;
 
+/*
+	Command Structure
+	[command] [arg 1] [arg 2] ... [arg n]
+*/
+
 //necessary functions
 void substitueStrings(string oldString, string newString);//reyes
 void copyLines(int numberOfLines);//reyes
@@ -29,12 +34,14 @@ void quit(); //Brae
 
 void moveUp(); //etc.
 void moveDown(); //etc.
+bool isValidFilename(string fileName); //etc.
 
 //team globals
 vector<string> harambe; //text body
 vector<string> storedCopy;
 bool fileEdited; //true if file has been edited since load or last save; false otherwise
 int currentLine;
+string currentFileName;
 
 //getters/setters
 bool getFileEdited(); //get value of fileEdited
@@ -42,14 +49,20 @@ void setFileEdited(bool value); //set value of fileEdited
 void init(); //initialize globals
 int getCurrentLine(); //get current line
 void setCurrentLine(int value); //set the value of currentLine
+void filePrompt();
 
 int main() //use this to test your functions
 {
+	cout << "Copyright Team 3 - 2016" << endl << endl;
 	init();
-	
-	//enter test code here
-	
-	return 0;
+	filePrompt();
+	string userInput;
+	while(true)
+	{
+
+	}
+
+	return 1; //SHOULD NEVER, EVER, EVER HAPPEN
 }
 
 void replace(int linesToReplace)
@@ -119,4 +132,66 @@ int getCurrentLine()
 void setCurrentLine(int value)
 {
 	currentLine = value;
+}
+
+void filePrompt()
+{
+	cout << "Would you like to load or create a new file?" << endl;
+	cout << "1. Load File" << endl;
+	cout << "2. Create File" << endl;
+	cout << "3. Quit" << endl;
+	int choice;
+	cin >> choice;
+	while(choice < 1 || choice > 3)
+	{
+		cout << "That is not a valid choice. Please choose from among the list." << endl;
+		cin >> choice;
+	}
+
+	if(choice == 1)
+	{
+		cout << "Enter an alphanumeric file name: ";
+		string fileName;
+		while(!isValidFilename(fileName))
+		{
+			cout << "This is not a valid file name, please try again, or enter \"quit\" to return to menu." << endl;
+			cin >> fileName;
+			if(fileName.compare("quit"))
+				filePrompt();
+		}
+		load(fileName);
+		currentFileName = fileName;
+	}
+	else if(choice == 2)
+	{
+		cout << "Enter an alphanumeric file name: ";
+		string fileName;
+		while(!isValidFilename(fileName))
+		{
+			cout << "This is not a valid file name, please try again, or enter \"quit\" to return to menu." << endl;
+			cin >> fileName;
+			if(fileName.compare("quit"))
+				filePrompt();
+		}
+		currentFileName = fileName;
+	}
+	else
+	{
+		cout << "Hit Enter to close the program. . .";
+		cin.ignore();
+		string dummy;
+		getline(cin, dummy);
+		exit(0);
+	}
+}
+
+bool isValidFilename(string fileName)
+{
+	for(unsigned int x = 0; x < fileName.length(); x++)
+	{
+		if(!isalnum(fileName[x]))
+			return false;
+	}
+	return true;
+
 }
