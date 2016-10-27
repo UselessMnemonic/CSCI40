@@ -1,4 +1,8 @@
 #include "stdafx.h"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
 #include "TextManager.h"
 
 
@@ -9,12 +13,27 @@ TextManager::TextManager(void)
 	fileEdited = false;
 	currentLine = 0;
 }
-
-
 TextManager::~TextManager(void)
 {
 }
+bool TextManager::getFileEdited()
+{
+	return fileEdited;
+}
+void TextManager::setFileEdited(bool value)
+{
+	fileEdited = value;
+}
+int TextManager::getCurrentLine()
+{
+	return currentLine;
+}
+void TextManager::setCurrentLine(int value)
+{
+	currentLine = value;
+}
 
+//CHRIS
 void TextManager::replace(int numLinesToReplace)
 {
 	if (numLinesToReplace < 0) //make sure user input is not negative number
@@ -56,22 +75,47 @@ void TextManager::paste()
 	//TO-DO method to set line to last pasted line
 }
 
-bool TextManager::getFileEdited()
+
+//KEVIN
+void TextManager::insertLines(int linesToinsert) //should be OK
 {
-	return fileEdited;
+	if(linesToinsert <= 0)
+		cout << "You must input a number above 0" << endl;
+		return;
+	
+		if(getCurrentLine() == harambe.size)
+		{
+			harambe.push_back("");
+			linesToinsert--;
+		}
+
+	for(int i = 1; i <= linesToinsert; i++)
+	{
+		harambe.insert(harambe.begin() + getCurrentLine()+1, ""); //writes the lines in the array to the text body 
+		setCurrentLine(getCurrentLine()+1);
+	}
+
+
 }
 
-void TextManager::setFileEdited(bool value)
+void TextManager::moveToLine(int lineToMove)
 {
-	fileEdited = value;
+	int lineNum;
+	
+	cout << "Which line do you want to move?" << endl;
+	cin >> lineNum;
+
+	
+	harambe.push_back(harambe[lineNum + 1]);
+	harambe.erase(harambe.begin() + (lineNum + 1)); 
 }
 
-int TextManager::getCurrentLine()
+void TextManager::deleteLines(int linesToDelete)
 {
-	return currentLine;
-}
+	int lineNum;
 
-void TextManager::setCurrentLine(int value)
-{
-	currentLine = value;
+	cout << "Starting from which line do you want to delete from?" << endl;
+	cin >> lineNum;
+
+	harambe.erase(harambe.begin() + (lineNum + 1), harambe.end());
 }
