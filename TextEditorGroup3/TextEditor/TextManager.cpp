@@ -117,5 +117,5 @@ void TextManager::deleteLines(int linesToDelete)
 	cout << "Starting from which line do you want to delete from?" << endl;
 	cin >> lineNum;
 
-	harambe.erase(harambe.begin() + (lineNum + 1), harambe.end());
+	harambe.erase(harambe.begin() + lineNum, harambe.begin() + lineNum + linesToDelete);
 }
