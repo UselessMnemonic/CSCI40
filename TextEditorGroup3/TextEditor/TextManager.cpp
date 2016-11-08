@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iomanip>
 #include "TextManager.h"
 
 
@@ -41,7 +42,8 @@ void TextManager::type(int numLinesToType)
 		numLinesToType = res;
 	for (int x = 0; x < numLinesToType; x++)
 	{
-		cout << "L " << getCurrentLine()+x << " : " << harambe.at(getCurrentLine() + x) << endl;
+		cout << "L " << setw(3) << getCurrentLine()+x;
+		cout << " : " << harambe.at(getCurrentLine() + x) << endl;
 	}
 }
 

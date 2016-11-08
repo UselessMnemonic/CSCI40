@@ -9,6 +9,7 @@
 #include <fstream>
 #include "UsefulMethods.h"
 #include "TextManager.h"
+#include "strings.h"
 using namespace std;
 
 /*
@@ -26,25 +27,25 @@ int main() //use this to test your functions
 	filePrompt(&harambeLivesOn);
 	string userInput;
 
-	harambeLivesOn.type(harambeLivesOn.getNumberLines());
-	harambeLivesOn.insertLines(3);
-	harambeLivesOn.type(harambeLivesOn.getNumberLines());
-	system("pause");
+	while(true)
+	{
+		cout << menuPrompt;
+		cin.ignore();
+		cin >> userInput;
+		exit(0);
+	}
 
-	return 0; //SHOULD NEVER, EVER, EVER HAPPEN
+	return 1; //SHOULD NEVER, EVER, EVER HAPPEN
 }
 
 void filePrompt(TextManager* tm)
 {
-	cout << "Would you like to load or create a new file?" << endl;
-	cout << "1. Load File" << endl;
-	cout << "2. Create File" << endl;
-	cout << "3. Quit" << endl;
+	cout << fileMenuPromt;
 	int choice;
 	cin >> choice;
 	while (choice < 1 || choice > 3)
 	{
-		cout << "That is not a valid choice. Please choose from among the list." << endl;
+		cout << invalidChoiceError;
 		cin >> choice;
 	}
 
@@ -56,7 +57,7 @@ void filePrompt(TextManager* tm)
 		getline(cin, fileName);
 		while (!isValidFilename(fileName))
 		{
-			cout << "This is not a valid file name, please try again, or enter \"quit\" to return to menu." << endl;
+			cout << filenameError;
 			cin >> fileName;
 			if (fileName.compare("quit"))
 				filePrompt(tm);
@@ -69,7 +70,7 @@ void filePrompt(TextManager* tm)
 		string fileName;
 		while (!isValidFilename(fileName))
 		{
-			cout << "This is not a valid file name, please try again, or enter \"quit\" to return to menu." << endl;
+			cout << filenameError;
 			cin >> fileName;
 			if (fileName.compare("quit"))
 				filePrompt(tm);
