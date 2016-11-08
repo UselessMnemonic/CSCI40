@@ -36,12 +36,12 @@ void TextManager::setCurrentLine(int value)
 //REYES
 void TextManager::type(int numLinesToType)
 {
-	int res = (harambe.size() - getCurrentLine());
+	int res = harambe.size() - getCurrentLine();
 	if (numLinesToType > res)
 		numLinesToType = res;
 	for (int x = 0; x < numLinesToType; x++)
 	{
-		cout << harambe.at(getCurrentLine() + x) << endl;
+		cout << "L " << getCurrentLine()+x << " : " << harambe.at(getCurrentLine() + x) << endl;
 	}
 }
 
@@ -91,15 +91,17 @@ void TextManager::paste()
 //KEVIN
 void TextManager::insertLines(int linesToinsert) //should be OK
 {
-	if(linesToinsert <= 0)
+	if (linesToinsert <= 0)
+	{
 		cout << "You must input a number above 0" << endl;
 		return;
-
+	}
 		string input;
 	if(getCurrentLine() == harambe.size()-1)
 	{
 		for (int i = 1; i <= linesToinsert; i++)
 		{
+			cin.ignore();
 			getline(cin, input);
 			harambe.push_back(input);
 			setCurrentLine(getCurrentLine() + 1);
@@ -119,7 +121,7 @@ void TextManager::insertLines(int linesToinsert) //should be OK
 
 void TextManager::moveToLine(int lineToMove)
 {
-	if(lineToMove > -1 && lineToMove < harambe.size())
+	if((lineToMove > -1) && (lineToMove < harambe.size()))
 	setCurrentLine(lineToMove);
 }
 
@@ -139,4 +141,21 @@ void TextManager::deleteLines(int linesToDelete)
 {
 
 	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToDelete-1);
+}
+
+void TextManager::load(string fileName)
+{
+	string line;
+	ifstream ifile(fileName);
+	while (getline(ifile, line))
+	{
+		harambe.push_back(line);
+	}
+	ifile.close();
+	setCurrentLine(0);
+}
+
+int TextManager::getNumberLines()
+{
+	return harambe.size();
 }

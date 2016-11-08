@@ -30,6 +30,8 @@ public:
 	void setCurrentLine(int value); //set the value of currentLine
 	int getCurrentLine(); //get current line
 
+	int getNumberLines();
+
 	//necessary functions
 	void substitueStrings(string oldString, string newString);//reyes
 	void copyLines(int numberOfLines);//reyes
@@ -50,6 +52,5 @@ public:
 
 	void moveUp(); //etc.
 	void moveDown(); //etc.
-	bool isValidFilename(string fileName); //etc.
 };
 

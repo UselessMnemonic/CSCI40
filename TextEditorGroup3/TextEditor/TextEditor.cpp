@@ -16,23 +16,25 @@ using namespace std;
 	[command] [arg 1] [arg 2] ... [arg n]
 */
 
+void filePrompt(TextManager* tm);
 
 int main() //use this to test your functions
 {
 	cout << "Copyright Team 3 - 2016" << endl << endl;
 	
-	TextManager harambeLivesOn();
-
+	TextManager harambeLivesOn;
+	filePrompt(&harambeLivesOn);
 	string userInput;
-	while(true)
-	{
 
-	}
+	harambeLivesOn.type(harambeLivesOn.getNumberLines());
+	harambeLivesOn.insertLines(3);
+	harambeLivesOn.type(harambeLivesOn.getNumberLines());
+	system("pause");
 
-	return 1; //SHOULD NEVER, EVER, EVER HAPPEN
+	return 0; //SHOULD NEVER, EVER, EVER HAPPEN
 }
 
-void filePrompt(TextManager tm)
+void filePrompt(TextManager* tm)
 {
 	cout << "Would you like to load or create a new file?" << endl;
 	cout << "1. Load File" << endl;
@@ -40,34 +42,36 @@ void filePrompt(TextManager tm)
 	cout << "3. Quit" << endl;
 	int choice;
 	cin >> choice;
-	while(choice < 1 || choice > 3)
+	while (choice < 1 || choice > 3)
 	{
 		cout << "That is not a valid choice. Please choose from among the list." << endl;
 		cin >> choice;
 	}
 
-	if(choice == 1)
+	if (choice == 1)
 	{
 		cout << "Enter an alphanumeric file name: ";
 		string fileName;
-		while(!isValidFilename(fileName))
+		cin.ignore();
+		getline(cin, fileName);
+		while (!isValidFilename(fileName))
 		{
 			cout << "This is not a valid file name, please try again, or enter \"quit\" to return to menu." << endl;
 			cin >> fileName;
-			if(fileName.compare("quit"))
+			if (fileName.compare("quit"))
 				filePrompt(tm);
 		}
-		tm.load(fileName);
+		(*tm).load(fileName);
 	}
-	else if(choice == 2)
+	else if (choice == 2)
 	{
 		cout << "Enter an alphanumeric file name: ";
 		string fileName;
-		while(!isValidFilename(fileName))
+		while (!isValidFilename(fileName))
 		{
 			cout << "This is not a valid file name, please try again, or enter \"quit\" to return to menu." << endl;
 			cin >> fileName;
-			if(fileName.compare("quit"))
+			if (fileName.compare("quit"))
 				filePrompt(tm);
 		}
 	}
@@ -79,3 +83,4 @@ void filePrompt(TextManager tm)
 		getline(cin, dummy);
 		exit(0);
 	}
+}
