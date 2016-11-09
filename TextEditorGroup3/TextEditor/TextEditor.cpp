@@ -9,30 +9,32 @@
 #include <fstream>
 #include "UsefulMethods.h"
 #include "TextManager.h"
-#include "strings.h"
+#include "res.h"
 using namespace std;
 
 /*
 	Command Structure
 	[command] [arg 1] [arg 2] ... [arg n]
 */
-
+void cls();
 void filePrompt(TextManager* tm);
 
 int main() //use this to test your functions
 {
-	cout << "Copyright Team 3 - 2016" << endl << endl;
+	cls();
 	
 	TextManager harambeLivesOn;
 	filePrompt(&harambeLivesOn);
-	string userInput;
+	char userInput;
 
 	while(true)
 	{
-		cout << menuPrompt;
+		cout << menuPrompt << selectionMarker;
 		cin.ignore();
 		cin >> userInput;
-		exit(0);
+
+
+
 	}
 
 	return 1; //SHOULD NEVER, EVER, EVER HAPPEN
@@ -49,39 +51,52 @@ void filePrompt(TextManager* tm)
 		cin >> choice;
 	}
 
+	cout << enterFilename;
+	string fileName;
+	cin.ignore();
+	getline(cin, fileName);
+	while (!isValidFilename(fileName))
+	{
+		cls();
+		cout << filenameError;
+		cin >> fileName;
+		if (fileName.compare("quit"))
+			filePrompt(tm);
+	}
+
 	if (choice == 1)
 	{
-		cout << "Enter an alphanumeric file name: ";
-		string fileName;
-		cin.ignore();
-		getline(cin, fileName);
-		while (!isValidFilename(fileName))
+		int res = (*tm).load(fileName);
+		if(!res)
 		{
-			cout << filenameError;
-			cin >> fileName;
-			if (fileName.compare("quit"))
-				filePrompt(tm);
-		}
-		(*tm).load(fileName);
-	}
-	else if (choice == 2)
-	{
-		cout << "Enter an alphanumeric file name: ";
-		string fileName;
-		while (!isValidFilename(fileName))
-		{
-			cout << filenameError;
-			cin >> fileName;
-			if (fileName.compare("quit"))
+			char choice;
+			cls();
+			cout << "That file does not exist. Would you like to create it? (Y/N)" << endl;
+			cin.ignore();
+			cin >> choice;
+			choice = tolower(choice);
+			while(!(choice == 'y' || choice == 'n'))
+			{
+				cout << invalidChoiceError;
+				cin >> choice;
+				choice = tolower(choice);
+			}
+			if(choice == 'n')
 				filePrompt(tm);
 		}
 	}
-	else
+	else if (choice == 3)
 	{
-		cout << "Hit Enter to close the program. . .";
+		cout << quitMessage;
 		cin.ignore();
 		string dummy;
 		getline(cin, dummy);
 		exit(0);
 	}
+}
+
+void cls()
+{
+	system("cls");
+	cout << gagCopyright;;
 }

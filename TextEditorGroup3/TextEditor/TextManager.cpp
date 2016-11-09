@@ -145,16 +145,22 @@ void TextManager::deleteLines(int linesToDelete)
 	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToDelete-1);
 }
 
-void TextManager::load(string fileName)
+int TextManager::load(string fileName)
 {
 	string line;
 	ifstream ifile(fileName);
+
+	if(!ifile.is_open())
+		return 0;
+
 	while (getline(ifile, line))
 	{
 		harambe.push_back(line);
 	}
+
 	ifile.close();
 	setCurrentLine(0);
+	return 1;
 }
 
 int TextManager::getNumberLines()

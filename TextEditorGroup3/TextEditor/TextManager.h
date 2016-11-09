@@ -47,7 +47,7 @@ public:
 
 	//additional
 	void save(string fileName); //Brae
-	void load(string fileName); //Brae
+	int load(string fileName); //Brae
 	void quit(); //Brae
 
 	void moveUp(); //etc.
