@@ -7,7 +7,6 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include "UsefulMethods.h"
 #include "TextManager.h"
 #include "res.h"
 using namespace std;
@@ -17,7 +16,8 @@ using namespace std;
 	[command] [arg 1] [arg 2] ... [arg n]
 */
 void cls();
-void filePrompt(TextManager* tm);
+void filePrompt(TextManager*);
+bool isValidFilename(string);
 
 int main() //use this to test your functions
 {
@@ -30,10 +30,88 @@ int main() //use this to test your functions
 	while(true)
 	{
 		cout << menuPrompt << selectionMarker;
-		cin.ignore();
 		cin >> userInput;
+		userInput = tolower(userInput);
 
-
+		switch(userInput)
+		{
+			case 'u' : { //substitute
+					   }
+				break;
+			case 't' : { //type
+							cls();
+							cout << "How many lines to type?: ";
+							int ltp;
+							cin >> ltp;
+							if(!(ltp > 0))
+							{
+								cout << endl << "Sorry, I can't do that." << endl;
+								break;
+							}
+							harambeLivesOn.type(ltp);
+					   }
+				break;
+			case 'r' : { //replace
+					   }
+				break;
+			case 'm' : { //move
+					   }
+				break;
+			case 'a' : { //adjust
+					   }
+				break;
+			case 'g' : { //goto
+							cls();
+							cout << "Go to Line: ";
+							int ltgt;
+							cin >> ltgt;
+							harambeLivesOn.type(ltgt);
+					   }
+				break;
+			case 'q' : { //quit
+							exit(0);
+					   }
+				break;
+			case 'c' : { //copy
+					   }
+				break;
+			case 'p' : { //pase
+					   }
+				break;
+			case 'i' : { //insert
+							cls();
+							cout << "How many lines to insert?: ";
+							int lts;
+							cin >> lts;
+							harambeLivesOn.insertLines(lts);
+					   }
+				break;
+			case 'd' : { //delete
+					   }
+				break;
+			case 'f' : { //find
+							cls();
+							cin.ignore();
+							cout << "Look for: ";
+							string testfor;
+							getline(cin, testfor);
+							if(testfor.empty())
+							{
+								cout << endl << "Can't look for blanks!" << endl;
+								break;
+							}
+							harambeLivesOn.locateString(testfor);
+					   }
+				break;
+			case 's' : { //save
+							harambeLivesOn.save(harambeLivesOn.getCurrentFilename());
+					   }
+				break;
+			default :  {
+							cout << endl;
+							cin.ignore();
+					   }
+		}
 
 	}
 
@@ -42,13 +120,23 @@ int main() //use this to test your functions
 
 void filePrompt(TextManager* tm)
 {
-	cout << fileMenuPromt;
+	cout << fileMenuPromt << selectionMarker;
 	int choice;
 	cin >> choice;
 	while (choice < 1 || choice > 3)
 	{
 		cout << invalidChoiceError;
+		cin.ignore();
 		cin >> choice;
+	}
+
+	if (choice == 3)
+	{
+		cout << quitMessage;
+		cin.ignore();
+		string dummy;
+		getline(cin, dummy);
+		exit(0);
 	}
 
 	cout << enterFilename;
@@ -72,7 +160,6 @@ void filePrompt(TextManager* tm)
 			char choice;
 			cls();
 			cout << "That file does not exist. Would you like to create it? (Y/N)" << endl;
-			cin.ignore();
 			cin >> choice;
 			choice = tolower(choice);
 			while(!(choice == 'y' || choice == 'n'))
@@ -85,14 +172,8 @@ void filePrompt(TextManager* tm)
 				filePrompt(tm);
 		}
 	}
-	else if (choice == 3)
-	{
-		cout << quitMessage;
-		cin.ignore();
-		string dummy;
-		getline(cin, dummy);
-		exit(0);
-	}
+	else
+		(*tm).createFile(fileName);
 }
 
 void cls()
@@ -100,3 +181,15 @@ void cls()
 	system("cls");
 	cout << gagCopyright;;
 }
+
+/*bool isValidFilename(string fileName)
+{
+	for(unsigned int x = 0; x < fileName.length(); x++)
+	{
+		if(fileName[x] != '.')
+			if(!isalnum(fileName[x]))
+				return false;
+	}
+	return true;
+
+}*/

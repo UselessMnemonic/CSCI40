@@ -15,6 +15,7 @@ private:
 	string currentFileName; //file name that is being used
 
 	bool fileEdited; //true if file has been edited since load or last save; false otherwise
+	bool isNewFile;
 
 	int currentLine; //current line that is in focus
 
@@ -31,6 +32,10 @@ public:
 	int getCurrentLine(); //get current line
 
 	int getNumberLines();
+	string getCurrentFilename();
+
+	bool isNew();
+	void setIsNew(bool);
 
 	//necessary functions
 	void substitueStrings(string oldString, string newString);//reyes
@@ -38,7 +43,7 @@ public:
 	void type(int linesToPrint);//reyes
 
 	void deleteLines(int numberOfLines);//kevin
-	void moveToLine(int lineToMoveTo);//kevin
+	void moveToLine(unsigned int lineToMoveTo);//kevin
 	void insertLines(int linesToInsert);//kevin
 
 	void replace(int numLinesToReplace);//chris
@@ -46,8 +51,9 @@ public:
 	void paste();//chris
 
 	//additional
-	void save(string fileName); //Brae
+	void save(string filename); //Brae
 	int load(string fileName); //Brae
+	void createFile(string fileName);
 	void quit(); //Brae
 
 	void moveUp(); //etc.
