@@ -36,6 +36,7 @@ int main() //use this to test your functions
 		switch(userInput)
 		{
 			case 'u' : { //substitute
+							
 					   }
 				break;
 			case 't' : { //type
@@ -141,7 +142,11 @@ int main() //use this to test your functions
 								cout << endl << "Can't look for blanks!" << endl;
 								break;
 							}
-							int res = harambeLivesOn.locateString(testfor);
+							if (!harambeLivesOn.locateString(testfor))
+							{
+								cout << "Not found. Check entire document? (y/n) ";
+
+							}
 					   }
 				break;
 			case 's' : { //save
@@ -157,7 +162,7 @@ int main() //use this to test your functions
 							cin.ignore();
 					   }
 		}
-
+		cout << '#' << endl;
 	}
 
 	return 1; //SHOULD NEVER, EVER, EVER HAPPEN

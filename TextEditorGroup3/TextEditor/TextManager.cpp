@@ -59,11 +59,13 @@ void TextManager::type(int numLinesToType)
 
 void TextManager::copyLines(int numLinesToCopy)
 {
-	if(harambe.size() - getCurrentLine() > numLinesToCopy)
+	if (harambe.size() == 0)
+		return;
+	if(harambe.size() - getCurrentLine() < numLinesToCopy)
 		numLinesToCopy = harambe.size() - getCurrentLine();
+	copyStorage.clear();
 	for(int x = 0; x < numLinesToCopy; x++)
 	{
-		copyStorage.clear();
 		copyStorage.push_back(harambe.at(getCurrentLine()+x));
 	}
 }
@@ -76,6 +78,7 @@ void TextManager::replace(int numLinesToReplace)
 	if (numLinesToReplace + getCurrentLine() > harambe.size()) //if number of lines to replace exceeds the size of the text body
 		numLinesToReplace = harambe.size() - getCurrentLine();//then we set the number to how many are left
 	string input;
+	cout << endl;
 	cin.ignore();
 	for (int x = 0; x < numLinesToReplace; x++)//for the lines specified
 	{
@@ -113,10 +116,18 @@ bool TextManager::locateString(string stringToFind)
 
 void TextManager::paste()
 {
-	vector<string>::iterator it = harambe.begin(); //create fancy "Start Here" sign
-	for(unsigned int x = 0; x < copyStorage.size(); x++) //for each line of copied text, paste after current line
-		harambe.insert(it+getCurrentLine()+x, copyStorage.at(x));
-	setCurrentLine(getCurrentLine()+copyStorage.size());
+	if (getCurrentLine() == (harambe.size() - 1))
+	{
+		for (unsigned int x = 0; x < copyStorage.size(); x++)
+			harambe.push_back(copyStorage.at(x));
+	}
+	else
+	{
+		for (unsigned int x = 0; x < copyStorage.size(); x++) //for each line of copied text, paste before current line
+			harambe.insert(harambe.begin() + getCurrentLine() + x, copyStorage.at(x));
+	}
+
+	setCurrentLine(getCurrentLine()+copyStorage.size()-1);
 }
 
 
@@ -124,13 +135,18 @@ void TextManager::paste()
 void TextManager::insertLines(int linesToinsert) //should be OK
 {
 	string input;
+	cin.ignore();
 	if(harambe.size() == 0 || getCurrentLine() == (harambe.size()-1))
 	{
-		for (int i = 0; i <= linesToinsert; i++)
+		int adjust = 1;
+
+		if (harambe.size() == 0)
+			adjust = -1;
+
+		for (int i = 0; i < linesToinsert; i++)
 		{
-			cout << "L " << setw(3) << getCurrentLine()+1;
+			cout << "L " << setw(3) << getCurrentLine()+adjust;
 			cout << " : ";
-			cin.ignore();
 			getline(cin, input);
 			harambe.push_back(input);
 			setCurrentLine(getCurrentLine() + 1);
@@ -138,12 +154,15 @@ void TextManager::insertLines(int linesToinsert) //should be OK
 	}
 	else
 	{
-		for (int i = 1; i <= linesToinsert; i++)
+		for (int i = 0; i < linesToinsert; i++)
 		{
+			cout << "L " << setw(3) << getCurrentLine();
+			cout << " : ";
 			getline(cin, input);
-			harambe.insert(harambe.begin() + getCurrentLine() + 1, input); //writes the lines in the array to the text body 
+			harambe.insert(harambe.begin() + getCurrentLine(), input); //writes the lines in the array to the text body 
 			setCurrentLine(getCurrentLine() + 1);
 		}
+		setCurrentLine(getCurrentLine() - 1);
 	}
 
 }
@@ -173,9 +192,11 @@ bool TextManager::moveToLine(int lineToMove)
 
 void TextManager::deleteLines(int linesToDelete)
 {
-	if(harambe.size() - getCurrentLine() > linesToDelete)
+	if(harambe.size() - getCurrentLine() < linesToDelete)
 		linesToDelete = harambe.size() - getCurrentLine();
-	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToDelete-1);
+	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToDelete);
+	if (getCurrentLine() >= harambe.size())
+		setCurrentLine(harambe.size() - 1);
 }
 //BRAE
 
@@ -185,8 +206,17 @@ int TextManager::load(string fileName)
 	ifstream ifile(fileName);
 	currentFileName = fileName;
 	setCurrentLine(0);
-	if(!ifile.is_open())
-		return 0;
+	if (!ifile.is_open())
+	{
+		ifile.close();
+		fileName.append(".txt");
+		ifile.open(fileName);
+		if (!ifile.is_open())
+		{
+			currentFileName = fileName;
+			return 0;
+		}
+	}
 
 	while (getline(ifile, line))
 	{
@@ -223,7 +253,7 @@ int TextManager::getNumberLines()
 
 void TextManager::displayCopyStorage()
 {
-	cout << "CLIPBOARD BEGIN";
+	cout << "CLIPBOARD BEGIN" << endl;
 	for(int x = 0; x < copyStorage.size(); x++)
 	{
 		cout << copyStorage.at(x) << endl;
