@@ -45,13 +45,23 @@ int main() //use this to test your functions
 							cin >> ltp;
 							if(!(ltp > 0))
 							{
-								cout << endl << "Sorry, I can't do that." << endl;
+								cout << endl << "Negative numbers not allowed here." << endl;
 								break;
 							}
 							harambeLivesOn.type(ltp);
 					   }
 				break;
 			case 'r' : { //replace
+							cls();
+							cout << "How many lines to replace?: ";
+							int ltr;
+							cin >> ltr;
+							if(!(ltr > 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
+							harambeLivesOn.replace(ltr);
 					   }
 				break;
 			case 'm' : { //move
@@ -65,7 +75,12 @@ int main() //use this to test your functions
 							cout << "Go to Line: ";
 							int ltgt;
 							cin >> ltgt;
-							harambeLivesOn.type(ltgt);
+							if(!(ltgt >= 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
+							harambeLivesOn.moveToLine(ltgt);
 					   }
 				break;
 			case 'q' : { //quit
@@ -73,9 +88,20 @@ int main() //use this to test your functions
 					   }
 				break;
 			case 'c' : { //copy
+							cls();
+							cout << "How many lines to copy?: ";
+							int ltc;
+							cin >> ltc;
+							if(!(ltc > 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
+							harambeLivesOn.copyLines(ltc);
 					   }
 				break;
 			case 'p' : { //pase
+							harambeLivesOn.paste();
 					   }
 				break;
 			case 'i' : { //insert
@@ -83,10 +109,25 @@ int main() //use this to test your functions
 							cout << "How many lines to insert?: ";
 							int lts;
 							cin >> lts;
+							if(!(lts > 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
 							harambeLivesOn.insertLines(lts);
 					   }
 				break;
 			case 'd' : { //delete
+							cls();
+							cout << "How many lines to delete?: ";
+							int ltd;
+							cin >> ltd;
+							if(!(ltd > 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
+							harambeLivesOn.deleteLines(ltd);
 					   }
 				break;
 			case 'f' : { //find
@@ -100,13 +141,17 @@ int main() //use this to test your functions
 								cout << endl << "Can't look for blanks!" << endl;
 								break;
 							}
-							harambeLivesOn.locateString(testfor);
+							int res = harambeLivesOn.locateString(testfor);
 					   }
 				break;
 			case 's' : { //save
 							harambeLivesOn.save(harambeLivesOn.getCurrentFilename());
 					   }
 				break;
+			case 'y' : {
+							harambeLivesOn.displayCopyStorage();
+					   }
+			    break;
 			default :  {
 							cout << endl;
 							cin.ignore();

@@ -14,7 +14,6 @@ TextManager::TextManager(void)
 	copyStorage = vector<string>();
 	fileEdited = false;
 	currentLine = 0;
-	isNewFile = false;
 	currentFileName =  "";
 }
 TextManager::~TextManager(void)
@@ -27,14 +26,6 @@ bool TextManager::getFileEdited()
 void TextManager::setFileEdited(bool value)
 {
 	fileEdited = value;
-}
-void TextManager::setIsNew(bool value)
-{
-	isNewFile = value;
-}
-bool TextManager::isNew()
-{
-	return isNewFile;
 }
 int TextManager::getCurrentLine()
 {
@@ -51,7 +42,6 @@ string TextManager::getCurrentFilename()
 void TextManager::createFile(string fileName)
 {
 	currentFileName = fileName;
-	setIsNew(true);
 }
 
 //REYES
@@ -67,26 +57,41 @@ void TextManager::type(int numLinesToType)
 	}
 }
 
+void TextManager::copyLines(int numLinesToCopy)
+{
+	if(harambe.size() - getCurrentLine() > numLinesToCopy)
+		numLinesToCopy = harambe.size() - getCurrentLine();
+	for(int x = 0; x < numLinesToCopy; x++)
+	{
+		copyStorage.clear();
+		copyStorage.push_back(harambe.at(getCurrentLine()+x));
+	}
+}
+
 //CHRIS
 void TextManager::replace(int numLinesToReplace)
 {
-	if (numLinesToReplace < 0) //make sure user input is not negative number
-		return;
 	if(harambe.size() == 0)
 		return;
-	if (unsigned int(numLinesToReplace + getCurrentLine()) > harambe.size()) //if number of lines to replace exceeds the size of the text body
+	if (numLinesToReplace + getCurrentLine() > harambe.size()) //if number of lines to replace exceeds the size of the text body
 		numLinesToReplace = harambe.size() - getCurrentLine();//then we set the number to how many are left
 	string input;
+	cin.ignore();
 	for (int x = 0; x < numLinesToReplace; x++)//for the lines specified
 	{
+		cout << "L " << setw(3) << getCurrentLine()+x;
+		cout << " : ";
 		getline(cin, input);
-		harambe.assign(getCurrentLine()+x, input); //set the line to blank
+		harambe[getCurrentLine()+x] = input;
 	}
 	setCurrentLine(numLinesToReplace + getCurrentLine() - 1);
 }
 
-void TextManager::locateString(string stringToFind)
+bool TextManager::locateString(string stringToFind)
 {
+	if(harambe.size() == 0)
+		return true;
+
 	string testString;
 	for (unsigned int x = getCurrentLine(); x < harambe.size(); x++) //for each line in the document, starting at current line
 	{
@@ -99,11 +104,11 @@ void TextManager::locateString(string stringToFind)
 			for(int x = 0; x < pos+8; x++)
 				cout << ' ';
 			cout << '^' << endl;
-			return;
+			return true;
 		}
 	}
 
-	cout << "Substring not found. Try from beginning of document? (Y/N): (DEPREDCATED)";
+	return false;
 }
 
 void TextManager::paste()
@@ -119,7 +124,7 @@ void TextManager::paste()
 void TextManager::insertLines(int linesToinsert) //should be OK
 {
 	string input;
-	if(isNew() || getCurrentLine() == (harambe.size()-1))
+	if(harambe.size() == 0 || getCurrentLine() == (harambe.size()-1))
 	{
 		for (int i = 0; i <= linesToinsert; i++)
 		{
@@ -143,10 +148,15 @@ void TextManager::insertLines(int linesToinsert) //should be OK
 
 }
 
-void TextManager::moveToLine(unsigned int lineToMove)
+bool TextManager::moveToLine(int lineToMove)
 {
 	if((lineToMove > -1) && (lineToMove < harambe.size()))
-	setCurrentLine(lineToMove);
+	{
+		setCurrentLine(lineToMove);
+		return true;
+	}
+	else
+		return false;
 }
 
 /*void TextManager::moveToLine(int lineToMove)
@@ -163,7 +173,8 @@ void TextManager::moveToLine(unsigned int lineToMove)
 
 void TextManager::deleteLines(int linesToDelete)
 {
-
+	if(harambe.size() - getCurrentLine() > linesToDelete)
+		linesToDelete = harambe.size() - getCurrentLine();
 	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToDelete-1);
 }
 //BRAE
@@ -172,6 +183,7 @@ int TextManager::load(string fileName)
 {
 	string line;
 	ifstream ifile(fileName);
+	currentFileName = fileName;
 	setCurrentLine(0);
 	if(!ifile.is_open())
 		return 0;
@@ -182,7 +194,6 @@ int TextManager::load(string fileName)
 	}
 
 	ifile.close();
-	currentFileName = fileName;
 	return 1;
 }
 
@@ -208,4 +219,14 @@ void TextManager::save(string filename)
 int TextManager::getNumberLines()
 {
 	return harambe.size();
+}
+
+void TextManager::displayCopyStorage()
+{
+	cout << "CLIPBOARD BEGIN";
+	for(int x = 0; x < copyStorage.size(); x++)
+	{
+		cout << copyStorage.at(x) << endl;
+	}
+	cout << "CLIPBOARD END" << endl;
 }
