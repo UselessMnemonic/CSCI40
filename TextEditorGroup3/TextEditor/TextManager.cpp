@@ -15,6 +15,7 @@ TextManager::TextManager(void)
 	fileEdited = false;
 	currentLine = 0;
 	currentFileName =  "";
+	undospace = vector<string>();
 }
 TextManager::~TextManager(void)
 {
@@ -26,6 +27,11 @@ bool TextManager::getFileEdited()
 void TextManager::setFileEdited(bool value)
 {
 	fileEdited = value;
+
+	if(!value)
+		return;
+
+	undospace = harambe;
 }
 int TextManager::getCurrentLine()
 {
@@ -70,11 +76,26 @@ void TextManager::copyLines(int numLinesToCopy)
 	}
 }
 
+void TextManager::substitueStrings(string oldS, string newS)
+{
+	setFileEdited(true);
+	string testString;
+	testString = harambe.at(getCurrentLine());
+	int pos = testString.find(oldS);
+	if (pos != string::npos) //if the line contains the token
+	{
+		testString.replace(pos, newS.size(), newS);
+		harambe[getCurrentLine()] = testString;
+	}
+}
+
 //CHRIS
 void TextManager::replace(int numLinesToReplace)
 {
 	if(harambe.size() == 0)
 		return;
+
+	setFileEdited(true);
 	if (numLinesToReplace + getCurrentLine() > harambe.size()) //if number of lines to replace exceeds the size of the text body
 		numLinesToReplace = harambe.size() - getCurrentLine();//then we set the number to how many are left
 	string input;
@@ -90,11 +111,27 @@ void TextManager::replace(int numLinesToReplace)
 	setCurrentLine(numLinesToReplace + getCurrentLine() - 1);
 }
 
+void TextManager::cutLines(int numLinesToCut)
+{
+	if (harambe.size() == 0)
+		return;
+
+	setFileEdited(true);
+	if(harambe.size() - getCurrentLine() < numLinesToCut)
+		numLinesToCut = harambe.size() - getCurrentLine();
+	copyStorage.clear();
+	for(int x = 0; x < numLinesToCut; x++)
+	{
+		copyStorage.push_back(harambe.at(getCurrentLine()+x));
+	}
+	harambe.erase(harambe.begin()+getCurrentLine(), harambe.begin()+getCurrentLine()+numLinesToCut);
+}
+
 bool TextManager::locateString(string stringToFind)
 {
 	if(harambe.size() == 0)
 		return true;
-
+	bool res = false;
 	string testString;
 	for (unsigned int x = getCurrentLine(); x < harambe.size(); x++) //for each line in the document, starting at current line
 	{
@@ -107,15 +144,16 @@ bool TextManager::locateString(string stringToFind)
 			for(int x = 0; x < pos+8; x++)
 				cout << ' ';
 			cout << '^' << endl;
-			return true;
+			res = true;
 		}
 	}
 
-	return false;
+	return res;
 }
 
 void TextManager::paste()
 {
+	setFileEdited(true);
 	if (getCurrentLine() == (harambe.size() - 1))
 	{
 		for (unsigned int x = 0; x < copyStorage.size(); x++)
@@ -136,6 +174,7 @@ void TextManager::insertLines(int linesToinsert) //should be OK
 {
 	string input;
 	cin.ignore();
+	setFileEdited(true);
 	if(harambe.size() == 0 || getCurrentLine() == (harambe.size()-1))
 	{
 		int adjust = 1;
@@ -178,20 +217,20 @@ bool TextManager::moveToLine(int lineToMove)
 		return false;
 }
 
-/*void TextManager::moveToLine(int lineToMove)
+void TextManager::moveLine(int newPlace)
 {
-	int lineNum;
-	
-	cout << "Which line do you want to move?" << endl;
-	cin >> lineNum;
-
-	
-	harambe.push_back(harambe[lineNum + 1]);
-	harambe.erase(harambe.begin() + (lineNum + 1)); 
-}*/
+	if(newPlace >= harambe.size())
+		return;
+	setFileEdited(true);
+	string old = harambe.at(getCurrentLine());
+	harambe.erase(harambe.begin()+getCurrentLine());
+	harambe.insert(harambe.begin()+newPlace, old);
+	setCurrentLine(newPlace);
+}
 
 void TextManager::deleteLines(int linesToDelete)
 {
+	setFileEdited(true);
 	if(harambe.size() - getCurrentLine() < linesToDelete)
 		linesToDelete = harambe.size() - getCurrentLine();
 	harambe.erase(harambe.begin() + getCurrentLine(), harambe.begin() + getCurrentLine() + linesToDelete);
@@ -229,6 +268,7 @@ int TextManager::load(string fileName)
 
 void TextManager::save(string filename)
 {
+	currentFileName = filename;
 	string line;
 	ofstream ofile(filename);
 	int x = harambe.size()-1;
@@ -244,6 +284,7 @@ void TextManager::save(string filename)
 	}
 
 	ofile.close();
+	setFileEdited(false);
 }
 
 int TextManager::getNumberLines()
@@ -259,4 +300,9 @@ void TextManager::displayCopyStorage()
 		cout << copyStorage.at(x) << endl;
 	}
 	cout << "CLIPBOARD END" << endl;
+}
+
+void TextManager::undo()
+{
+	harambe.swap(undospace);
 }

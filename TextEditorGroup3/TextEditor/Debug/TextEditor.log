@@ -1,8 +1,16 @@
-﻿  TextManager.cpp
-c:\users\owner\source\repos\csci40\texteditorgroup3\texteditor\textmanager.cpp(64): warning C4018: '<' : signed/unsigned mismatch
-c:\users\owner\source\repos\csci40\texteditorgroup3\texteditor\textmanager.cpp(78): warning C4018: '>' : signed/unsigned mismatch
-c:\users\owner\source\repos\csci40\texteditorgroup3\texteditor\textmanager.cpp(167): warning C4018: '<' : signed/unsigned mismatch
-c:\users\owner\source\repos\csci40\texteditorgroup3\texteditor\textmanager.cpp(190): warning C4018: '<' : signed/unsigned mismatch
-c:\users\owner\source\repos\csci40\texteditorgroup3\texteditor\textmanager.cpp(193): warning C4018: '>=' : signed/unsigned mismatch
-c:\users\owner\source\repos\csci40\texteditorgroup3\texteditor\textmanager.cpp(252): warning C4018: '<' : signed/unsigned mismatch
-  TextEditor.vcxproj -> C:\Users\Owner\Source\Repos\CSCI40\TextEditorGroup3\Debug\TextEditor.exe
+﻿Build started 11/17/2016 4:54:52 PM.
+     1>Project "C:\Users\FC.S20\Documents\GitHub\CSCI40\TextEditorGroup3\TextEditor\TextEditor.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\TextEditor.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt TextEditor.cpp
+         TextEditor.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\FC.S20\Documents\GitHub\CSCI40\TextEditorGroup3\Debug\TextEditor.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\FC.S20\Documents\GitHub\CSCI40\TextEditorGroup3\Debug\TextEditor.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\FC.S20\Documents\GitHub\CSCI40\TextEditorGroup3\Debug\TextEditor.lib" /MACHINE:X86 Debug\TextEditor.res
+         Debug\stdafx.obj
+         Debug\TextEditor.obj
+         Debug\TextManager.obj
+         TextEditor.vcxproj -> C:\Users\FC.S20\Documents\GitHub\CSCI40\TextEditorGroup3\Debug\TextEditor.exe
+     1>Done Building Project "C:\Users\FC.S20\Documents\GitHub\CSCI40\TextEditorGroup3\TextEditor\TextEditor.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.27

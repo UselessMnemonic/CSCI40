@@ -35,8 +35,21 @@ int main() //use this to test your functions
 
 		switch(userInput)
 		{
-			case 'u' : { //substitute
-							
+			case 'b' : { //substitute
+							cls();
+							cin.ignore();
+							cout << "Look for: ";
+							string testfor;
+							getline(cin, testfor);
+							if(testfor.empty())
+							{
+								cout << endl << "Can't look for blanks!" << endl;
+								break;
+							}
+							cout << "Replace with: ";
+							string rep;
+							getline(cin, rep);
+							harambeLivesOn.substitueStrings(testfor, rep);
 					   }
 				break;
 			case 't' : { //type
@@ -66,9 +79,16 @@ int main() //use this to test your functions
 					   }
 				break;
 			case 'm' : { //move
-					   }
-				break;
-			case 'a' : { //adjust
+							cls();
+							cout << "Move current line to line: ";
+							int ltm;
+							cin >> ltm;
+							if(!(ltm >= 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
+							harambeLivesOn.moveLine(ltm);
 					   }
 				break;
 			case 'g' : { //goto
@@ -85,6 +105,25 @@ int main() //use this to test your functions
 					   }
 				break;
 			case 'q' : { //quit
+							if(harambeLivesOn.getFileEdited())
+								{
+									cls();
+									cout << "Save unsaved edits? (y/n): ";
+									char ans;
+									cin >> ans;
+									ans = tolower(ans);
+									while(!(ans == 'y' || ans == 'n'))
+									{
+										cout << invalidChoiceError << endl;
+										cout << "Save unsaved edits? (y/n): ";
+										cin >> ans;
+										ans = tolower(ans);
+									}
+									if(ans == 'y')
+									{
+										harambeLivesOn.save(harambeLivesOn.getCurrentFilename());
+									}
+								}
 							exit(0);
 					   }
 				break;
@@ -142,10 +181,25 @@ int main() //use this to test your functions
 								cout << endl << "Can't look for blanks!" << endl;
 								break;
 							}
+							char ans;
 							if (!harambeLivesOn.locateString(testfor))
 							{
-								cout << "Not found. Check entire document? (y/n) ";
-
+								cout << "Not found. Check entire document? (y/n): ";
+								cin >> ans;
+								ans = tolower(ans);
+								while(!(ans == 'y' || ans == 'n'))
+								{
+									cout << invalidChoiceError << endl;
+									cout << "Not found. Check entire document? (y/n): ";
+									cin >> ans;
+									ans = tolower(ans);
+								}
+								if(ans == 'y')
+								{
+									harambeLivesOn.setCurrentLine(0);
+									if(!harambeLivesOn.locateString(testfor))
+										cout << "Not found." << endl;
+								}
 							}
 					   }
 				break;
@@ -157,6 +211,45 @@ int main() //use this to test your functions
 							harambeLivesOn.displayCopyStorage();
 					   }
 			    break;
+			case 'a' : {
+							cls();
+							cout << enterFilename;
+							string fileName;
+							cin.ignore();
+							getline(cin, fileName);
+							while (!isValidFilename(fileName))
+							{
+								cls();
+								cout << filenameError;
+								cin >> fileName;
+								if (fileName.compare("quit"))
+									break;
+							}
+							harambeLivesOn.save(fileName);
+							cout << "Saved as: " << fileName << endl;
+					   }
+				break;
+			case 'u' : {
+							harambeLivesOn.undo();
+					   }
+				break;
+			case 'x' : {
+							cls();
+							cout << "How many lines to cut?: ";
+							int ltx;
+							cin >> ltx;
+							if(!(ltx > 0))
+							{
+								cout << endl << "Negative numbers not allowed here." << endl;
+								break;
+							}
+							harambeLivesOn.cutLines(ltx);
+					   }
+				break;
+			case 'h' : {
+							cls();
+							cout << helpText;
+					   }
 			default :  {
 							cout << endl;
 							cin.ignore();
@@ -175,8 +268,7 @@ void filePrompt(TextManager* tm)
 	cin >> choice;
 	while (choice < 1 || choice > 3)
 	{
-		cout << invalidChoiceError;
-		cin.ignore();
+		cout << invalidChoiceError << selectionMarker;
 		cin >> choice;
 	}
 

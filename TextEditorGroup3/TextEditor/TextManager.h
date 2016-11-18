@@ -11,7 +11,8 @@ private:
 
 	vector<string> harambe; //text body
 	vector<string> copyStorage; //storage for whatever was copied 
-	
+	vector<string> undospace; //storage for undo frames
+
 	string currentFileName; //file name that is being used
 
 	bool fileEdited; //true if file has been edited since load or last save; false otherwise
@@ -51,10 +52,9 @@ public:
 	int load(string fileName); //Brae
 	void createFile(string fileName);
 	void quit(); //Brae
-
-	void moveUp(); //etc.
-	void moveDown(); //etc.
-
+	void moveLine(int newPlace);
 	void displayCopyStorage();
+	void cutLines(int linesToCut);
+	void undo();
 };
 
