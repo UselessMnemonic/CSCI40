@@ -58,7 +58,7 @@ void TextManager::type(int numLinesToType)
 		numLinesToType = res;
 	for (int x = 0; x < numLinesToType; x++)
 	{
-		cout << "L " << setw(3) << getCurrentLine()+x;
+		cout << "L " << setw(3) << getCurrentLine()+x+1;
 		cout << " : " << harambe.at(getCurrentLine() + x) << endl;
 	}
 }
@@ -103,7 +103,7 @@ void TextManager::replace(int numLinesToReplace)
 	cin.ignore();
 	for (int x = 0; x < numLinesToReplace; x++)//for the lines specified
 	{
-		cout << "L " << setw(3) << getCurrentLine()+x;
+		cout << "L " << setw(3) << getCurrentLine()+x + 1;
 		cout << " : ";
 		getline(cin, input);
 		harambe[getCurrentLine()+x] = input;
@@ -139,7 +139,7 @@ bool TextManager::locateString(string stringToFind)
 		int pos = testString.find(stringToFind);
 		if (pos != string::npos) //if the line contains the token, set the current line there
 		{
-			cout << "L " << setw(3) << x;
+			cout << "L " << setw(3) << x+1;
 			cout << " : " << testString << endl;
 			for(int x = 0; x < pos+8; x++)
 				cout << ' ';
@@ -184,7 +184,7 @@ void TextManager::insertLines(int linesToinsert) //should be OK
 
 		for (int i = 0; i < linesToinsert; i++)
 		{
-			cout << "L " << setw(3) << getCurrentLine()+adjust;
+			cout << "L " << setw(3) << getCurrentLine()+adjust+1;
 			cout << " : ";
 			getline(cin, input);
 			harambe.push_back(input);
@@ -195,7 +195,7 @@ void TextManager::insertLines(int linesToinsert) //should be OK
 	{
 		for (int i = 0; i < linesToinsert; i++)
 		{
-			cout << "L " << setw(3) << getCurrentLine();
+			cout << "L " << setw(3) << getCurrentLine()+1;
 			cout << " : ";
 			getline(cin, input);
 			harambe.insert(harambe.begin() + getCurrentLine(), input); //writes the lines in the array to the text body 

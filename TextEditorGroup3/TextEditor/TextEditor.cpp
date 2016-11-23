@@ -18,6 +18,11 @@ using namespace std;
 void cls();
 void filePrompt(TextManager*);
 bool isValidFilename(string);
+char getInput();
+int getIntInput();
+void getSettings();
+void setSettings();
+void doCaps();
 
 int main() //use this to test your functions
 {
@@ -30,8 +35,7 @@ int main() //use this to test your functions
 	while(true)
 	{
 		cout << menuPrompt << selectionMarker;
-		cin >> userInput;
-		userInput = tolower(userInput);
+		userInput = getInput();
 
 		switch(userInput)
 		{
@@ -55,11 +59,10 @@ int main() //use this to test your functions
 			case 't' : { //type
 							cls();
 							cout << "How many lines to type?: ";
-							int ltp;
-							cin >> ltp;
+							int ltp = getIntInput();
 							if(!(ltp > 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.type(ltp);
@@ -68,11 +71,10 @@ int main() //use this to test your functions
 			case 'r' : { //replace
 							cls();
 							cout << "How many lines to replace?: ";
-							int ltr;
-							cin >> ltr;
+							int ltr = getIntInput();
 							if(!(ltr > 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.replace(ltr);
@@ -81,11 +83,11 @@ int main() //use this to test your functions
 			case 'm' : { //move
 							cls();
 							cout << "Move current line to line: ";
-							int ltm;
-							cin >> ltm;
+							int ltm = getIntInput();
+							ltm--;
 							if(!(ltm >= 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.moveLine(ltm);
@@ -94,11 +96,11 @@ int main() //use this to test your functions
 			case 'g' : { //goto
 							cls();
 							cout << "Go to Line: ";
-							int ltgt;
-							cin >> ltgt;
+							int ltgt = getIntInput();
+							ltgt--;
 							if(!(ltgt >= 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.moveToLine(ltgt);
@@ -109,9 +111,7 @@ int main() //use this to test your functions
 								{
 									cls();
 									cout << "Save unsaved edits? (y/n): ";
-									char ans;
-									cin >> ans;
-									ans = tolower(ans);
+									char ans = getInput();
 									while(!(ans == 'y' || ans == 'n'))
 									{
 										cout << invalidChoiceError << endl;
@@ -130,11 +130,10 @@ int main() //use this to test your functions
 			case 'c' : { //copy
 							cls();
 							cout << "How many lines to copy?: ";
-							int ltc;
-							cin >> ltc;
+							int ltc = getIntInput();
 							if(!(ltc > 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.copyLines(ltc);
@@ -147,11 +146,10 @@ int main() //use this to test your functions
 			case 'i' : { //insert
 							cls();
 							cout << "How many lines to insert?: ";
-							int lts;
-							cin >> lts;
+							int lts = getIntInput();
 							if(!(lts > 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.insertLines(lts);
@@ -160,11 +158,10 @@ int main() //use this to test your functions
 			case 'd' : { //delete
 							cls();
 							cout << "How many lines to delete?: ";
-							int ltd;
-							cin >> ltd;
+							int ltd = getIntInput();
 							if(!(ltd > 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.deleteLines(ltd);
@@ -185,14 +182,12 @@ int main() //use this to test your functions
 							if (!harambeLivesOn.locateString(testfor))
 							{
 								cout << "Not found. Check entire document? (y/n): ";
-								cin >> ans;
-								ans = tolower(ans);
+								ans = getInput();
 								while(!(ans == 'y' || ans == 'n'))
 								{
 									cout << invalidChoiceError << endl;
 									cout << "Not found. Check entire document? (y/n): ";
-									cin >> ans;
-									ans = tolower(ans);
+									ans = getInput();
 								}
 								if(ans == 'y')
 								{
@@ -236,11 +231,10 @@ int main() //use this to test your functions
 			case 'x' : {
 							cls();
 							cout << "How many lines to cut?: ";
-							int ltx;
-							cin >> ltx;
+							int ltx = getIntInput();
 							if(!(ltx > 0))
 							{
-								cout << endl << "Negative numbers not allowed here." << endl;
+								cout << endl << negandzeroerror << endl;
 								break;
 							}
 							harambeLivesOn.cutLines(ltx);
@@ -255,7 +249,7 @@ int main() //use this to test your functions
 							cin.ignore();
 					   }
 		}
-		cout << '#' << endl;
+		cout << "###" << endl;
 	}
 
 	return 1; //SHOULD NEVER, EVER, EVER HAPPEN
@@ -264,12 +258,11 @@ int main() //use this to test your functions
 void filePrompt(TextManager* tm)
 {
 	cout << fileMenuPromt << selectionMarker;
-	int choice;
-	cin >> choice;
+	int choice = getIntInput();
 	while (choice < 1 || choice > 3)
 	{
 		cout << invalidChoiceError << selectionMarker;
-		cin >> choice;
+		choice = getIntInput();
 	}
 
 	if (choice == 3)
@@ -301,14 +294,12 @@ void filePrompt(TextManager* tm)
 		{
 			char choice;
 			cls();
-			cout << "That file does not exist. Would you like to create it? (Y/N)" << endl;
-			cin >> choice;
-			choice = tolower(choice);
+			cout << "That file does not exist. Would you like to create it? (Y/N) : " ;
+			choice = getInput();
 			while(!(choice == 'y' || choice == 'n'))
 			{
 				cout << invalidChoiceError;
-				cin >> choice;
-				choice = tolower(choice);
+				choice = getInput();
 			}
 			if(choice == 'n')
 				filePrompt(tm);
@@ -321,17 +312,43 @@ void filePrompt(TextManager* tm)
 void cls()
 {
 	system("cls");
-	cout << gagCopyright;;
+	cout << gagCopyright;
 }
 
-/*bool isValidFilename(string fileName)
-{
-	for(unsigned int x = 0; x < fileName.length(); x++)
-	{
-		if(fileName[x] != '.')
-			if(!isalnum(fileName[x]))
-				return false;
-	}
-	return true;
 
-}*/
+char getInput()
+{
+	string input;
+	cin >> input;
+	char ret;
+
+	if(!input.empty())
+	{
+		if(input.compare("MCSIZEITPLEASE"))
+		{
+			doCaps();
+			return 'z';
+		}
+		else
+		{
+			ret = input[0];
+			ret = tolower(ret);
+			return ret;
+		}
+	}
+	else
+		return 'z';
+}
+
+int getIntInput()
+{
+	string input;
+	cin >> input;
+	int ret = atoi(input.c_str());
+	return ret;
+}
+
+void doCaps()
+{
+	cout << std::uppercase;
+}
