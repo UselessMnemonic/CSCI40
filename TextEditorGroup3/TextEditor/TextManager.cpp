@@ -219,13 +219,15 @@ bool TextManager::moveToLine(int lineToMove)
 
 void TextManager::moveLine(int newPlace)
 {
-	if(newPlace >= harambe.size())
-		return;
+	if (newPlace >= harambe.size() - 1)
+		newPlace = harambe.size();
 	setFileEdited(true);
 	string old = harambe.at(getCurrentLine());
 	harambe.erase(harambe.begin()+getCurrentLine());
 	harambe.insert(harambe.begin()+newPlace, old);
 	setCurrentLine(newPlace);
+	if (getCurrentLine() == harambe.size())
+		setCurrentLine(newPlace - 1);
 }
 
 void TextManager::deleteLines(int linesToDelete)
