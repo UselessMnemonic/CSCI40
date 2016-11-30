@@ -9,18 +9,15 @@
 #include <fstream>
 #include "TextManager.h"
 #include "res.h"
+#include "NewCOUT.h"
 using namespace std;
 
-/*
-	Command Structure
-	[command] [arg 1] [arg 2] ... [arg n]
-*/
 void cls();
 void filePrompt(TextManager*);
 bool isValidFilename(string);
 char getInput();
 int getIntInput();
-bool mcsized = false;
+NewCOUT magiccout;
 
 int main() //use this to test your functions
 {
@@ -28,10 +25,9 @@ int main() //use this to test your functions
 	TextManager harambeLivesOn;
 	filePrompt(&harambeLivesOn);
 	char userInput;
-
 	while(true)
 	{
-		cout << (mcsized ? uppercase : nouppercase) << menuPrompt << selectionMarker;
+		magiccout << menuPrompt << selectionMarker;
 		userInput = getInput();
 
 		switch(userInput)
@@ -39,15 +35,15 @@ int main() //use this to test your functions
 			case 'b' : { //substitute
 							cls();
 							cin.ignore();
-							cout << "Look for: ";
+							magiccout << "Look for: ";
 							string testfor;
 							getline(cin, testfor);
 							if(testfor.empty())
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << "Can't look for blanks!" << endl;
+								magiccout <<  '\n' << "Can't look for blanks!" << '\n';
 								break;
 							}
-							cout << (mcsized ? uppercase : nouppercase) << "Replace with: ";
+							magiccout <<  "Replace with: ";
 							string rep;
 							getline(cin, rep);
 							harambeLivesOn.substitueStrings(testfor, rep);
@@ -55,11 +51,11 @@ int main() //use this to test your functions
 				break;
 			case 't' : { //type
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "How many lines to type?: ";
+							magiccout <<  "How many lines to type?: ";
 							int ltp = getIntInput();
 							if(!(ltp > 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.type(ltp);
@@ -67,11 +63,11 @@ int main() //use this to test your functions
 				break;
 			case 'r' : { //replace
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "How many lines to replace?: ";
+							magiccout <<  "How many lines to replace?: ";
 							int ltr = getIntInput();
 							if(!(ltr > 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.replace(ltr);
@@ -79,12 +75,12 @@ int main() //use this to test your functions
 				break;
 			case 'm' : { //move
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "Move current line to line: ";
+							magiccout <<  "Move current line to line: ";
 							int ltm = getIntInput();
 							ltm--;
 							if(!(ltm >= 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.moveLine(ltm);
@@ -92,12 +88,12 @@ int main() //use this to test your functions
 				break;
 			case 'g' : { //goto
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "Go to Line: ";
+							magiccout << "Go to Line: ";
 							int ltgt = getIntInput();
 							ltgt--;
 							if(!(ltgt >= 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.moveToLine(ltgt);
@@ -107,12 +103,12 @@ int main() //use this to test your functions
 							if(harambeLivesOn.getFileEdited())
 								{
 									cls();
-									cout << (mcsized ? uppercase : nouppercase) << "Save unsaved edits? (y/n): ";
+									magiccout << "Save unsaved edits? (y/n): ";
 									char ans = getInput();
 									while(!(ans == 'y' || ans == 'n'))
 									{
-										cout << (mcsized ? uppercase : nouppercase) << invalidChoiceError << endl;
-										cout << (mcsized ? uppercase : nouppercase) << "Save unsaved edits? (y/n): ";
+										magiccout <<  invalidChoiceError << '\n';
+										magiccout <<  "Save unsaved edits? (y/n): ";
 										cin >> ans;
 										ans = tolower(ans);
 									}
@@ -126,11 +122,11 @@ int main() //use this to test your functions
 				break;
 			case 'c' : { //copy
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "How many lines to copy?: ";
+							magiccout <<  "How many lines to copy?: ";
 							int ltc = getIntInput();
 							if(!(ltc > 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.copyLines(ltc);
@@ -142,11 +138,11 @@ int main() //use this to test your functions
 				break;
 			case 'i' : { //insert
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "How many lines to insert?: ";
+							magiccout <<  "How many lines to insert?: ";
 							int lts = getIntInput();
 							if(!(lts > 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.insertLines(lts);
@@ -154,11 +150,11 @@ int main() //use this to test your functions
 				break;
 			case 'd' : { //delete
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "How many lines to delete?: ";
+							magiccout <<  "How many lines to delete?: ";
 							int ltd = getIntInput();
 							if(!(ltd > 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.deleteLines(ltd);
@@ -167,30 +163,30 @@ int main() //use this to test your functions
 			case 'f' : { //find
 							cls();
 							cin.ignore();
-							cout << (mcsized ? uppercase : nouppercase) << "Look for: ";
+							magiccout <<  "Look for: ";
 							string testfor;
 							getline(cin, testfor);
 							if(testfor.empty())
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << "Can't look for blanks!" << endl;
+								magiccout << '\n' << "Can't look for blanks!" << '\n';
 								break;
 							}
 							char ans;
 							if (!harambeLivesOn.locateString(testfor))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << "Not found. Check entire document? (y/n): ";
+								magiccout <<  "Not found. Check entire document? (y/n): ";
 								ans = getInput();
 								while(!(ans == 'y' || ans == 'n'))
 								{
-									cout << (mcsized ? uppercase : nouppercase) << invalidChoiceError << endl;
-									cout << (mcsized ? uppercase : nouppercase) << "Not found. Check entire document? (y/n): ";
+									magiccout << invalidChoiceError << '\n';
+									magiccout << "Not found. Check entire document? (y/n): ";
 									ans = getInput();
 								}
 								if(ans == 'y')
 								{
 									harambeLivesOn.setCurrentLine(0);
 									if(!harambeLivesOn.locateString(testfor))
-										cout << (mcsized ? uppercase : nouppercase) << "Not found." << endl;
+										magiccout <<  "Not found." << '\n';
 								}
 							}
 					   }
@@ -205,20 +201,20 @@ int main() //use this to test your functions
 			    break;
 			case 'a' : {
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << enterFilename;
+							magiccout <<  enterFilename;
 							string fileName;
 							cin.ignore();
 							getline(cin, fileName);
 							while (!isValidFilename(fileName))
 							{
 								cls();
-								cout << (mcsized ? uppercase : nouppercase) << filenameError;
+								magiccout <<  filenameError;
 								cin >> fileName;
 								if (fileName.compare("quit"))
 									break;
 							}
 							harambeLivesOn.save(fileName);
-							cout << (mcsized ? uppercase : nouppercase) << "Saved as: " << fileName << endl;
+							magiccout <<  "Saved as: " << fileName << '\n';
 					   }
 				break;
 			case 'u' : {
@@ -227,11 +223,11 @@ int main() //use this to test your functions
 				break;
 			case 'x' : {
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << "How many lines to cut?: ";
+							magiccout << "How many lines to cut?: ";
 							int ltx = getIntInput();
 							if(!(ltx > 0))
 							{
-								cout << (mcsized ? uppercase : nouppercase) << endl << negandzeroerror << endl;
+								magiccout << '\n' << negandzeroerror << '\n';
 								break;
 							}
 							harambeLivesOn.cutLines(ltx);
@@ -239,14 +235,14 @@ int main() //use this to test your functions
 				break;
 			case 'h' : {
 							cls();
-							cout << (mcsized ? uppercase : nouppercase) << helpText;
+							magiccout << helpText;
 					   }
 			default :  {
-							cout << endl;
+							magiccout << '\n';
 							cin.ignore();
 					   }
 		}
-		cout << "###" << endl;
+		magiccout << "###" << '\n';
 	}
 
 	return 1; //SHOULD NEVER, EVER, EVER HAPPEN
@@ -254,31 +250,31 @@ int main() //use this to test your functions
 
 void filePrompt(TextManager* tm)
 {
-	cout << fileMenuPromt << selectionMarker;
+	magiccout << fileMenuPromt << selectionMarker;
 	int choice = getIntInput();
 	while (choice < 1 || choice > 3)
 	{
-		cout << invalidChoiceError << selectionMarker;
+		magiccout << invalidChoiceError << selectionMarker;
 		choice = getIntInput();
 	}
 
 	if (choice == 3)
 	{
-		cout << quitMessage;
+		magiccout << quitMessage;
 		cin.ignore();
 		string dummy;
 		getline(cin, dummy);
 		exit(0);
 	}
 
-	cout << enterFilename;
+	magiccout << enterFilename;
 	string fileName;
 	cin.ignore();
 	getline(cin, fileName);
 	while (!isValidFilename(fileName))
 	{
 		cls();
-		cout << filenameError;
+		magiccout << filenameError;
 		cin >> fileName;
 		if (fileName.compare("quit"))
 			filePrompt(tm);
@@ -291,11 +287,11 @@ void filePrompt(TextManager* tm)
 		{
 			char choice;
 			cls();
-			cout << "That file does not exist. Would you like to create it? (Y/N) : " ;
+			magiccout << "That file does not exist. Would you like to create it? (Y/N) : " ;
 			choice = getInput();
-			while(!(choice == 'y' || choice == 'n'))
+			while(choice != 'y' && choice != 'n')
 			{
-				cout << invalidChoiceError;
+				magiccout << invalidChoiceError << selectionMarker;
 				choice = getInput();
 			}
 			if(choice == 'n')
@@ -309,12 +305,13 @@ void filePrompt(TextManager* tm)
 void cls()
 {
 	system("cls");
-	cout << gagCopyright;
+	magiccout << gagCopyright;
 }
 
 
 char getInput()
 {
+
 	string input;
 	cin >> input;
 	char ret;
@@ -323,8 +320,20 @@ char getInput()
 	{
 		if(!input.compare("MCSIZEITPLEASE"))
 		{
-			mcsized = true;
-			cout << "SURE THING!" << endl;
+			magiccout.doUpper();
+			magiccout << "SURE THING!" << '\n';
+			return 'z';
+		}
+		else if(!input.compare("Lays."))
+		{
+			magiccout.doAir();
+			magiccout << "INCOMING AIR JOKES" << '\n';
+			return 'z';
+		}
+		else if(!input.compare("cha-cha-slide"))
+		{
+			magiccout.reverse();
+			magiccout << "Cha Cha Real Smooth!" << '\n';
 			return 'z';
 		}
 		else
